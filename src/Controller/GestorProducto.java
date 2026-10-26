@@ -1,8 +1,9 @@
 package Controller;
 
 import Model.Producto;
-import
-
+import Model.ProductoMixto;
+import Model.ProductoVenta;
+import Model.Insumo;
 import java.util.HashMap;
 import java.util.Map;
 public class GestorProducto {

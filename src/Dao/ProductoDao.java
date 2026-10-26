@@ -1,6 +1,8 @@
 package Dao;
 
 import Model.Producto;
+import Model.ProductoMixto;
+import Model.ProductoVenta;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package Model;
 
-public abstract class DetalleVenta implements CalculableSubtotal {
+public abstract class DetalleVenta {
     private int idDetalle;
     private int cantidad;
     private double precioUnitario;

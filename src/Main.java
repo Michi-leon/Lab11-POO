@@ -1,5 +1,3 @@
 public class Main{
-
-    SI SE VEE ESTO POR FAVOR CONFIRMARME CREO Q YA ENTENDI COMO SE USA
     
 }
