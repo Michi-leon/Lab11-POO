@@ -1,3 +1,5 @@
+package Model;
+
 public abstract class DetalleVenta implements CalculableSubtotal {
     private int idDetalle;
     private int cantidad;

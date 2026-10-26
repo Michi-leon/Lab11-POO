@@ -1,3 +1,5 @@
+package Model;
+
 public class ProductoMixto extends Producto {
     private float precioVenta;
 

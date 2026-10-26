@@ -1,3 +1,5 @@
+package Model;
+
 public abstract class Producto {
     private  int idProducto;
     private String nombre;

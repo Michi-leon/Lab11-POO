@@ -1,3 +1,5 @@
+package Model;
+
 public class Insumo extends Producto {
 
     public Insumo(int idProducto, String nombre, float precioCompra,  int stockActual, int stockMinimo) {

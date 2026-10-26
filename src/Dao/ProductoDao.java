@@ -1,4 +1,4 @@
-package dao;
+package Dao;
 
 import Model.Producto;
 import java.sql.*;

@@ -1,3 +1,5 @@
+package Model;
+
 public class DetalleVentaServicio extends DetalleVenta {
     private Servicio servicio;
 
