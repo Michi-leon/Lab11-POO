@@ -1,53 +1,29 @@
+
 package Model;
 
-import java.util.ArrayList;
+import java.sql.Date;
 
 public class Venta {
-    private ArrayList<DetalleVenta> detalles;
+    private int idVenta;
+    private int idCliente;
+    private Date fecha;
+    private double total;
 
-    public Venta() {
-        detalles = new ArrayList<>();
+    public Venta() {}
+
+    public Venta(int idVenta, int idCliente, Date fecha, double total) {
+        this.idVenta = idVenta;
+        this.idCliente = idCliente;
+        this.fecha = fecha;
+        this.total = total;
     }
 
-    public void agregarDetalle(DetalleVenta detalle) {
-        if (detalle == null) {
-            System.out.println("El detalle no puede ser nulo.");
-            return;
-        }
-        detalles.add(detalle);
-    }
-
-    public boolean eliminarDetalle(int idDetalle) {
-        for (int i = 0; i < detalles.size(); i++) {
-            if (detalles.get(i).getIdDetalle() == idDetalle) {
-                detalles.remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public double calcularTotal() {
-        double total = 0;
-
-        for (DetalleVenta detalle : detalles) {
-            total += detalle.calcularSubtotal();
-        }
-
-        return total;
-    }
-
-    public void mostrarDetalles() {
-        if (detalles.isEmpty()) {
-            System.out.println("La venta no tiene detalles.");
-        } else {
-            for (DetalleVenta detalle : detalles) {
-                System.out.println("ID detalle: "+ detalle.getIdDetalle());
-                System.out.println("Cantidad: "+ detalle.getCantidad());
-                System.out.println("Precio unitario: "+ detalle.getPrecioUnitario());
-                System.out.println("Descuento: "+ detalle.getDescuento());
-                System.out.println("Subtotal: "+ detalle.calcularSubtotal());
-            }
-        }
-    }
+    public int getIdVenta() { return idVenta; }
+    public void setIdVenta(int idVenta) { this.idVenta = idVenta; }
+    public int getIdCliente() { return idCliente; }
+    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
+    public double getTotal() { return total; }
+    public void setTotal(double total) { this.total = total; }
 }
