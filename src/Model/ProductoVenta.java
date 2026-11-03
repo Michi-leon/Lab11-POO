@@ -5,7 +5,7 @@ public class ProductoVenta extends Producto {
 
     public ProductoVenta(int idProducto, String nombre, float precioCompra, int stockActual, int stockMinimo, float precioVenta) {
         super(idProducto, nombre, precioCompra, stockActual, stockMinimo);
-        this.precioVenta = precioVenta;
+        setPrecioVenta(precioVenta);
     }
 
     public float getPrecioVenta() {
@@ -14,7 +14,7 @@ public class ProductoVenta extends Producto {
 
     public void setPrecioVenta(float precioVenta) {
         if (precioVenta >= 0) {
-            setPrecioVenta(precioVenta);
+            this.precioVenta=precioVenta;
         } else {
             System.out.println("El precio de venta no puede ser negativo.");
         }

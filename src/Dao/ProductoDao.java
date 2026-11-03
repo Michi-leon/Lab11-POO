@@ -87,12 +87,15 @@ public class ProductoDao {
 
     // 2. LISTAR 
     public List<Producto> listarProductos() {
-        List<Producto> lista = new ArrayList<>();
-        String query = "SELECT id_producto, nombre, precio_compra, stock_actual, stock_minimo FROM productos";
-        
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+    List<Producto> lista = new ArrayList<>();
+        String query = "SELECT p.*, pv.precio_venta AS pv_precio, pm.precio_venta AS pm_precio, pi.id_producto AS is_insumo " +
+                    "FROM productos p " +
+                    "LEFT JOIN productos_venta pv ON p.id_producto = pv.id_producto " +
+                    "LEFT JOIN productos_mixtos pm ON p.id_producto = pm.id_producto " +
+                    "LEFT JOIN productos_insumo pi ON p.id_producto = pi.id_producto";
+
+        try (Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id_producto");
@@ -101,92 +104,51 @@ public class ProductoDao {
                 int stockActual = rs.getInt("stock_actual");
                 int stockMinimo = rs.getInt("stock_minimo");
 
-                // Productos_venta
-                String queryVenta = "SELECT precio_venta FROM productos_venta WHERE id_producto = ?";
-                PreparedStatement psV = connection.prepareStatement(queryVenta);
-                psV.setInt(1, id);
-                ResultSet rsV = psV.executeQuery();
-                if (rsV.next()) {
-                    lista.add(new ProductoVenta(id, nombre, precioCompra, stockActual, stockMinimo, rsV.getFloat("precio_venta")));
-                    rsV.close(); psV.close();
-                    continue; 
+                if (rs.getObject("pv_precio") != null) {
+                    lista.add(new ProductoVenta(id, nombre, precioCompra, stockActual, stockMinimo, rs.getFloat("pv_precio")));
+                } else if (rs.getObject("pm_precio") != null) {
+                    lista.add(new ProductoMixto(id, nombre, precioCompra, stockActual, stockMinimo, rs.getFloat("pm_precio")));
+                } else {
+                    lista.add(new Insumo(id, nombre, precioCompra, stockActual, stockMinimo));
                 }
-                rsV.close(); psV.close();
-
-                // Productos_mixtos
-                String queryMixto = "SELECT precio_venta FROM productos_mixtos WHERE id_producto = ?";
-                PreparedStatement psM = connection.prepareStatement(queryMixto);
-                psM.setInt(1, id);
-                ResultSet rsM = psM.executeQuery();
-                if (rsM.next()) {
-                    lista.add(new ProductoMixto(id, nombre, precioCompra, stockActual, stockMinimo, rsM.getFloat("precio_venta")));
-                    rsM.close(); psM.close();
-                    continue;
-                }
-                rsM.close(); psM.close();
-
-                lista.add(new Insumo(id, nombre, precioCompra, stockActual, stockMinimo));
             }
-            rs.close();
-            statement.close();
         } catch (SQLException e) {
             System.out.println("Error al listar productos: " + e.getMessage());
         }
         return lista;
     }
-    // 3. BUSCAR POR ID 
+    // BUSCAR POR ID 
     public Producto buscarPorId(int idBuscar) {
-        String queryPadre = "SELECT id_producto, nombre, precio_compra, stock_actual, stock_minimo FROM productos WHERE id_producto = ?";
-        Producto p = null;
-        
-        try {
-            PreparedStatement ps = connection.prepareStatement(queryPadre);
+        String query = "SELECT p.*, pv.precio_venta AS pv_precio, pm.precio_venta AS pm_precio " +
+                    "FROM productos p " +
+                    "LEFT JOIN productos_venta pv ON p.id_producto = pv.id_producto " +
+                    "LEFT JOIN productos_mixtos pm ON p.id_producto = pm.id_producto " +
+                    "WHERE p.id_producto = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, idBuscar);
-            ResultSet rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String nombre = rs.getString("nombre");
+                    float precioCompra = rs.getFloat("precio_compra");
+                    int stockActual = rs.getInt("stock_actual");
+                    int stockMinimo = rs.getInt("stock_minimo");
 
-            if (rs.next()) {
-                int id = rs.getInt("id_producto");
-                String nombre = rs.getString("nombre");
-                float precioCompra = rs.getFloat("precio_compra");
-                int stockActual = rs.getInt("stock_actual");
-                int stockMinimo = rs.getInt("stock_minimo");
-
-                // Productos_venta
-                String queryVenta = "SELECT precio_venta FROM productos_venta WHERE id_producto = ?";
-                PreparedStatement psV = connection.prepareStatement(queryVenta);
-                psV.setInt(1, idBuscar);
-                ResultSet rsV = psV.executeQuery();
-                if (rsV.next()) {
-                    p = new ProductoVenta(id, nombre, precioCompra, stockActual, stockMinimo, rsV.getFloat("precio_venta"));
-                    rsV.close(); psV.close(); rs.close(); ps.close();
-                    return p;
+                    if (rs.getObject("pv_precio") != null) {
+                        return new ProductoVenta(idBuscar, nombre, precioCompra, stockActual, stockMinimo, rs.getFloat("pv_precio"));
+                    } else if (rs.getObject("pm_precio") != null) {
+                        return new ProductoMixto(idBuscar, nombre, precioCompra, stockActual, stockMinimo, rs.getFloat("pm_precio"));
+                    } else {
+                        return new Insumo(idBuscar, nombre, precioCompra, stockActual, stockMinimo);
+                    }
                 }
-                rsV.close(); psV.close();
-
-                //Productos_mixtos
-                String queryMixto = "SELECT precio_venta FROM productos_mixtos WHERE id_producto = ?";
-                PreparedStatement psM = connection.prepareStatement(queryMixto);
-                psM.setInt(1, idBuscar);
-                ResultSet rsM = psM.executeQuery();
-                if (rsM.next()) {
-                    p = new ProductoMixto(id, nombre, precioCompra, stockActual, stockMinimo, rsM.getFloat("precio_venta"));
-                    rsM.close(); psM.close(); rs.close(); ps.close();
-                    return p;
-                }
-                rsM.close(); psM.close();
-
-                //Insumo
-                p = new Insumo(id, nombre, precioCompra, stockActual, stockMinimo);
             }
-            rs.close();
-            ps.close();
         } catch (SQLException e) {
             System.out.println("Error al buscar producto: " + e.getMessage());
         }
-        return p;
+        return null;
     }
 
-    // 4. ACTUALIZAR
+    // ACTUALIZAR
     public boolean actualizar(Producto p) {
         String queryMadre = "UPDATE productos SET nombre = ?, precio_compra = ?, stock_actual = ?, stock_minimo = ? WHERE id_producto = ?";
         int filasMadre = 0;
@@ -239,7 +201,7 @@ public class ProductoDao {
         }
     }
 
-    // 5. ELIMINAR
+    // ELIMINAR
     public boolean eliminar(int idEliminar) {
         String query = "DELETE FROM productos WHERE id_producto = ?";
         try {

@@ -1,4 +1,4 @@
-package DataBase;
+package Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

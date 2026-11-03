@@ -8,7 +8,7 @@ import Dao.TrabajadoraDao;
 import Dao.ServicioDao;
 import Dao.VentaDao;
 import Dao.DetalleDao;
-import DataBase.Conexion;
+import Service.Conexion;
 import Model.*;
 
 import java.sql.Connection;
@@ -104,7 +104,8 @@ public class Main {
             System.out.println("5. ELIMINAR PRODUCTO");
             System.out.println("6. LISTAR STOCK BAJO");
             System.out.println("7. VOLVER AL MENU PRINCIPAL");
-            System.out.println("8. INGRESE UNA OPCION: ");
+            System.out.println();
+            System.out.println("INGRESE UNA OPCION: ");
             
             if (scanner.hasNextInt()) {
                 op = scanner.nextInt();
