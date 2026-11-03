@@ -12,9 +12,7 @@ public abstract class DetalleVenta {
         setPrecioUnitario(precioUnitario);
         setDescuento(descuento);
     }
-
-    public abstract double calcularSubtotal();
-
+    
     public int getIdDetalle() {
         return idDetalle;
     }
@@ -63,4 +61,10 @@ public abstract class DetalleVenta {
             System.out.println("El descuento no es valido.");
         }
     }
+
+    public double calcularSubtotal() {
+        return (getCantidad() * getPrecioUnitario())- getDescuento();
+    }
+
+    public abstract String mostrarTipo();
 }

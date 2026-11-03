@@ -1,14 +1,20 @@
 package Model;
 
-public class Servicio {
+public class Servicio{
     private int idServicio;
     private String nombre;
-    private double precioHabitual;
+    private String descripcion;
+    private double precio;
+    private int duracion;
 
-    public Servicio(int idServicio, String nombre,double precioHabitual) {
+    public Servicio(int idServicio, String nombre, String descripcion,
+                    double precio, int duracion) {
+
         setIdServicio(idServicio);
         setNombre(nombre);
-        setPrecioHabitual(precioHabitual);
+        setDescripcion(descripcion);
+        setPrecio(precio);
+        setDuracion(duracion);
     }
 
     public int getIdServicio() {
@@ -19,7 +25,7 @@ public class Servicio {
         if (idServicio > 0) {
             this.idServicio = idServicio;
         } else {
-            System.out.println("El ID del servicio debe ser mayor que cero.");
+            System.out.println("El ID debe ser mayor que cero.");
         }
     }
 
@@ -31,19 +37,47 @@ public class Servicio {
         if (nombre != null && !nombre.equals("")) {
             this.nombre = nombre;
         } else {
-            System.out.println("El nombre no puede estar vacio.");
+            System.out.println("El nombre no puede estar vacio");
         }
     }
 
-    public double getPrecioHabitual() {
-        return precioHabitual;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setPrecioHabitual(double precioHabitual) {
-        if (precioHabitual >= 0) {
-            this.precioHabitual = precioHabitual;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        if (precio >= 0) {
+            this.precio = precio;
         } else {
-            System.out.println("El precio no puede ser negativo.");
+            System.out.println("El precio no puede ser negativo");
         }
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        if (duracion > 0) {
+            this.duracion = duracion;
+        } else {
+            System.out.println("La duración debe ser mayor que cero");
+        }
+    }
+
+    public void imprimirInformacion(){
+        System.out.println("ID Servicio: " + idServicio);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Descripcion: " + descripcion);
+        System.out.println("Precio: " + precio);
+        System.out.println("Duracion: " + duracion + " minutos");
     }
 }

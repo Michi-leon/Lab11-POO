@@ -12,18 +12,30 @@ public class VentaDao {
         this.con = con;
     }
 
-    public void registrar(Venta v) {
-        String sql = "INSERT INTO venta (idCliente, fecha, total) VALUES (?, ?, ?)";
+    // REGISTRAR
+    public boolean registrar(Venta v) {
+        String sql = "INSERT INTO venta (idVenta, idCliente, fecha, total) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, v.getIdCliente());
-            ps.setDate(2, v.getFecha());
-            ps.setDouble(3, v.getTotal());
-            ps.executeUpdate();
+            ps.setInt(1, v.getIdVenta());
+            ps.setInt(2, v.getIdCliente());
+            ps.setDate(3, v.getFecha());
+            ps.setDouble(4, v.getTotal());
+            
+            int filasAfectadas = ps.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                System.out.println("Se inserto correctamente los datos de la Venta.");
+                return true;
+            } else {
+                System.out.println("No se pudo registrar la venta.");
+                return false;
+            }
         } catch (SQLException e) {
             System.out.println("Error al registrar venta: " + e.getMessage());
+            return false;
         }
     }
-
+    //Listar
     public List<Venta> listarVentas() {
         List<Venta> lista = new ArrayList<>();
         String sql = "SELECT idVenta, idCliente, fecha, total FROM venta";
@@ -38,7 +50,7 @@ public class VentaDao {
         }
         return lista;
     }
-
+    //BUSCAR
     public Venta buscarPorId(int id) {
         String sql = "SELECT idVenta, idCliente, fecha, total FROM venta WHERE idVenta = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -55,26 +67,46 @@ public class VentaDao {
         return null;
     }
 
-    public void actualizar(Venta v) {
+    //ACTUALIZAR
+    public boolean actualizar(Venta v) {
         String sql = "UPDATE venta SET idCliente = ?, fecha = ?, total = ? WHERE idVenta = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, v.getIdCliente());
             ps.setDate(2, v.getFecha());
             ps.setDouble(3, v.getTotal());
             ps.setInt(4, v.getIdVenta());
-            ps.executeUpdate();
+            
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Se actualizo correctamente los datos de la Venta.");
+                return true;
+            } else {
+                System.out.println("No se encontraron datos para actualizar.");
+                return false;
+            }
         } catch (SQLException e) {
             System.out.println("Error al actualizar venta: " + e.getMessage());
+            return false;
         }
     }
 
-    public void eliminar(int id) {
+    //ELIMINAR
+    public boolean eliminar(int id) {
         String sql = "DELETE FROM venta WHERE idVenta = ?";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.executeUpdate();
+            
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Se elimino correctamente la venta.");
+                return true;
+            } else {
+                System.out.println("No se encontro la venta seleccionada.");
+                return false;
+            }
         } catch (SQLException e) {
             System.out.println("Error al eliminar venta: " + e.getMessage());
+            return false;
         }
     }
 }

@@ -21,7 +21,7 @@ public class DetalleVentaProducto extends DetalleVenta {
     }
 
     @Override
-    public double calcularSubtotal() {
-        return (getCantidad() * getPrecioUnitario())- getDescuento();
+    public String mostrarTipo() {
+        return "PRODUCTO";
     }
 }

@@ -4,7 +4,6 @@ import Dao.ProductoDao;
 import Model.Producto;
 import Model.ProductoMixto;
 import Model.ProductoVenta;
-import Model.Insumo;
 import java.util.List;
 
 public class GestorProducto {

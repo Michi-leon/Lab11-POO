@@ -26,4 +26,10 @@ public class Venta {
     public void setFecha(Date fecha) { this.fecha = fecha; }
     public double getTotal() { return total; }
     public void setTotal(double total) { this.total = total; }
+    public void imprimirInformacion(){
+        System.out.println("ID Venta: " +idVenta);
+        System.out.println("ID Cliente: " +idCliente);
+        System.out.println("Fecha: " + fecha);
+        System.out.println("Total: " + getTotal());
+    }
 }
